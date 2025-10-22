@@ -1,0 +1,53 @@
+@using Microsoft.JSInterop
+@implements IDisposable
+
+<div class="card">
+  <h3>Memory Match: Find the Phantom Pairs</h3>
+  <div id="@_gridId" class="memory-grid"></div>
+
+  @if (!string.IsNullOrWhiteSpace(_wonPrize))
+  {
+    <div class="prize-callout">
+      <strong>Prize unlocked:</strong> @_wonPrize
+    </div>
+  }
+</div>
+
+@code {
+  [Inject] IJSRuntime JS { get; set; } = default!;
+
+  // Supply prizes from the page that hosts this component
+  [Parameter] public string[] Prizes { get; set; } = Array.Empty<string>();
+
+  string _gridId = $"mem-{Guid.NewGuid():N}";
+  string? _wonPrize;
+  DotNetObjectReference<MemoryMatch>? _selfRef;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      _selfRef = DotNetObjectReference.Create(this);
+      await JS.InvokeVoidAsync("memoryGame.init", _gridId, _selfRef);
+    }
+  }
+
+  // Called by JS when all pairs are matched
+  [JSInvokable]
+  public Task MemoryDone()
+  {
+    if (Prizes?.Length > 0)
+    {
+      var r = new Random();
+      _wonPrize = Prizes[r.Next(Prizes.Length)];
+    }
+    else
+    {
+      _wonPrize = "🎭 Phantom Sticker";
+    }
+    StateHasChanged();
+    return Task.CompletedTask;
+  }
+
+  public void Dispose() => _selfRef?.Dispose();
+}

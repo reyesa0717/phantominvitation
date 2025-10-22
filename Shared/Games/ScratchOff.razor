@@ -1,0 +1,59 @@
+@using Microsoft.JSInterop
+@implements IDisposable
+
+<div class="scratch-wrap">
+  <canvas id="@_canvasId"></canvas>
+
+  @if (_unlocked)
+  {
+    <div class="scratch-result">
+      <strong>Unlocked:</strong> @PrizeText
+    </div>
+  }
+</div>
+
+@code {
+  // Accept (and ignore) projected content so ChildContent binding is allowed.
+  [Parameter] public RenderFragment? ChildContent { get; set; }
+
+  private readonly string _canvasId = $"scratch_{Guid.NewGuid():N}";
+  private DotNetObjectReference<ScratchOff>? _selfRef;
+  private bool _unlocked;
+
+  [Inject] private IJSRuntime JS { get; set; } = default!;
+
+  [Parameter] public string PrizeText { get; set; } = "🎭 Phantom Surprise";
+  [Parameter] public string CoverColor { get; set; } = "#3a1012";
+  [Parameter] public int Width { get; set; } = 480;
+  [Parameter] public int Height { get; set; } = 300;
+  [Parameter] public double Threshold { get; set; } = 0.55;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (!firstRender) return;
+
+    _selfRef = DotNetObjectReference.Create(this);
+    await JS.InvokeVoidAsync(
+      "scratchGame.init",
+      _canvasId,
+      new {
+        width = Width,
+        height = Height,
+        prize = PrizeText,
+        coverColor = CoverColor,
+        threshold = Threshold
+      },
+      _selfRef
+    );
+  }
+
+  [JSInvokable]
+  public Task ScratchUnlocked()
+  {
+    _unlocked = true;
+    StateHasChanged();
+    return Task.CompletedTask;
+  }
+
+  public void Dispose() => _selfRef?.Dispose();
+}

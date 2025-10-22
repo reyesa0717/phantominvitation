@@ -1,0 +1,33 @@
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Routing
+
+<div class="topbar">
+  <button class="hamburger" @onclick="ToggleNav" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <a class="brand" href="/">PHANTOM AIR</a>
+</div>
+
+<div class="layout">
+  <nav class="sidenav @(navOpen ? "open" : null)">
+    <NavLink href="/" Match="NavLinkMatch.All" @onclick="CloseNav">Home</NavLink>
+    <NavLink href="/games" @onclick="CloseNav">Games</NavLink>
+  </nav>
+
+  <main>
+    @Body
+  </main>
+</div>
+
+@if (navOpen)
+{
+  <!-- Dim background; clicking it closes the menu -->
+  <div class="nav-dim" @onclick="CloseNav"></div>
+}
+
+@code {
+  bool navOpen;
+
+  void ToggleNav() => navOpen = !navOpen;
+  void CloseNav()  => navOpen = false;
+}

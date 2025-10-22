@@ -1,0 +1,42 @@
+@code {
+    public record Ticket(string Name, string Section, string Row, string Seat, string Venue);
+    [Parameter] public Ticket[] Items { get; set; } = Array.Empty<Ticket>();
+}
+
+<div class="ticket-grid">
+@foreach (var t in Items)
+{
+  <div class="ticket-card">
+    <div class="ticket-main">
+      <div class="ticket-header">
+        <h3>🎭 Phantom Ticket</h3>
+        <span class="badge">Box Five</span>
+      </div>
+      <div class="venue">@t.Venue</div>
+      <div class="meta">
+        <div>
+          <small>Section</small>
+          <strong>@t.Section</strong>
+        </div>
+        <div>
+          <small>Row</small>
+          <strong>@t.Row</strong>
+        </div>
+        <div>
+          <small>Seat</small>
+          <strong>@t.Seat</strong>
+        </div>
+        <div>
+          <small>Guest</small>
+          <strong>@t.Name</strong>
+        </div>
+      </div>
+    </div>
+    <div class="ticket-divider"></div>
+    <div class="ticket-stub">
+      <div class="mask">🎭</div>
+      <div class="barcode"></div>
+    </div>
+  </div>
+}
+</div>

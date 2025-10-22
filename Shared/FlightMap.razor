@@ -1,0 +1,47 @@
+@* FlightMap *@
+<div class="maxw map-wrap card" style="overflow:hidden">
+  <h3 style="margin:0 0 .5rem 0; text-align:center">Flight Path: Houston → Chicago</h3>
+
+  <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet" role="img"
+       aria-label="Houston (HOU) to Chicago (CHI) flight path">
+    <!-- backdrop -->
+    <defs>
+      <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0c0e18" />
+        <stop offset="100%" stop-color="#190a0a" />
+      </linearGradient>
+      <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#ffdf9e" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+    </defs>
+
+    <rect x="0" y="0" width="100%" height="100%" fill="url(#night)" />
+    <circle cx="600" cy="300" r="240" fill="url(#glow)" />
+
+    <!-- cities -->
+    <g class="labels" font-family="system-ui, -apple-system, Segoe UI, sans-serif" fill="#ffd166">
+      <!-- Houston -->
+      <circle class="airport" cx="240" cy="460" r="10" fill="#e63946"/>
+      <text x="260" y="455" class="city">Houston (HOU)</text>
+
+      <!-- Chicago -->
+      <circle class="airport" cx="960" cy="120" r="10" fill="#06d6a0"/>
+      <text x="980" y="115" class="city">Chicago (CHI)</text>
+    </g>
+
+    <!-- route -->
+    <path id="route"
+          d="M240,460 C420,350 600,250 960,120"
+          class="route"
+          fill="none" />
+
+    <!-- moving plane -->
+    <g transform="translate(-16,-16)">
+      <text font-size="32">✈️</text>
+      <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
+        <mpath href="#route"/>
+      </animateMotion>
+    </g>
+  </svg>
+</div>

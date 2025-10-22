@@ -1,0 +1,61 @@
+@page "/"
+@using PhantomAirInvite.Shared
+@inject Microsoft.JSInterop.IJSRuntime JS
+
+@if (showIntro)
+{
+  <IntroLetter Headline="From the Opera’s Desk"
+               Body="Your passage to Chicago awaits. Inside: your seats, our flight path, and a game or two to unlock prizes."
+               PresentationDate="@PresentationDate"
+               OnOpen="DismissIntro" />
+}
+else
+{
+  <div class="section text-center">
+    <h1 style="letter-spacing:.12em">PHANTOM'S LETTER</h1>
+
+    <div class="card maxw" style="margin-bottom:10px">
+      <strong>See you Friday:</strong> @PresentationDate.ToString("dddd, MMM d") — “What we’ll do in Chicago”
+    </div>
+
+    <div class="maxw maxw--wide">
+      <FlightMap />
+    </div>
+
+    <div class="card maxw tickets-wrap" style="margin-top:50px">
+      <h3 style="margin-top:5 padding:5px margin:10px">Tonight’s Tickets</h3>
+      <Tickets Items="@tickets" />
+      <div/>
+    </div>
+  </div>
+}
+
+@code {
+  // Real presentation date
+  DateTime PresentationDate = new DateTime(2025, 10, 24);
+
+  // Your actual tickets
+  Tickets.Ticket[] tickets =
+  {
+    new("Raquel Sanchez",       "Main Living Room", "P", "5", "Cadillac Palace Theatre, Chicago"),
+    new("Erica Penaflor", "Main Living Room", "R", "67", "Cadillac Palace Theatre, Chicago"),
+  };
+
+  bool showIntro = true;
+
+  protected override async Task OnInitializedAsync()
+  {
+    try
+    {
+      var val = await JS.InvokeAsync<object>("storage.get", "phantom_intro_dismissed");
+      if (val is not null) showIntro = false;
+    }
+    catch { showIntro = true; }
+  }
+
+  void DismissIntro()
+  {
+    showIntro = false;
+    StateHasChanged();
+  }
+}
