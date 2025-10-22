@@ -1,8 +1,7 @@
-name: Deploy Phantom Invitation to GitHub Pages
-
+name: Deploy to GitHub Pages
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -24,24 +23,28 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: '8.0.x'
 
-      # Build publishable Blazor WASM and generate the static wwwroot output
       - name: Publish Blazor WASM
-        run: dotnet publish PhantomAirInvite.csproj -c Release -o publish
+        run: dotnet publish -c Release -o dist
 
-      # Upload ONLY the published wwwroot (this includes _framework, wasm, etc.)
-      - name: Upload Pages artifact
+      # Move the published wwwroot to an artifact folder
+      - name: Prepare Pages artifact
+        run: |
+          mkdir public
+          cp -r dist/wwwroot/* public/
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: publish/wwwroot
+          path: ./public
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
