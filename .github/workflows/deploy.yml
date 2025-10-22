@@ -1,3 +1,4 @@
+# .github/workflows/deploy.yml
 name: Deploy Blazor WASM to GitHub Pages
 
 on:
@@ -12,7 +13,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -29,25 +30,24 @@ jobs:
       - name: Publish Blazor WASM
         run: dotnet publish ./PhantomAirInvite.csproj -c Release -o dist
 
-      - name: List build output for debugging
+      # We upload dist/wwwroot (Blazor’s static output)
+      - name: List outputs (debug)
         run: |
           echo "Listing dist:"
           ls -la dist
           echo "Listing dist/wwwroot:"
-          ls -la dist/wwwroot
-          echo "Listing dist/wwwroot/phantominvitation:"
-          ls -la dist/wwwroot/phantominvitation
+          ls -la dist/wwwroot || true
 
-      - name: Add 404.html for SPA routing
-        run: cp "dist/wwwroot/phantominvitation/index.html" "dist/wwwroot/phantominvitation/404.html"
+      - name: Ensure .nojekyll exists   # 👈 CRITICAL
+        run: touch dist/wwwroot/.nojekyll
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+      - name: Add 404.html for client routing
+        run: cp dist/wwwroot/index.html dist/wwwroot/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/wwwroot/phantominvitation
+          path: dist/wwwroot
 
   deploy:
     needs: build
