@@ -29,15 +29,15 @@ jobs:
       - name: Publish Blazor WASM
         run: dotnet publish ./PhantomAirInvite.csproj -c Release -o dist
 
-      # Copy index.html -> 404.html so deep links /games work on GitHub Pages
       - name: Add 404.html for client routing
         run: |
-          cp dist/wwwroot/index.html dist/wwwroot/404.html
+          cp dist/index.html dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/wwwroot
+          path: dist
+
 
   deploy:
     runs-on: ubuntu-latest
