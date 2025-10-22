@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Phantom Air</title>
+  <!-- IMPORTANT: base must match your repo name -->
   <base href="/phantominvitation/">
-
-
-  <link rel="stylesheet" href="css/app.css" />
-  <meta name="description" content="An interactive Phantom of the Opera trip invitation with games and a boarding pass." />
-
-  <script>
-    (function () {
-      var params = new URLSearchParams(window.location.search);
-      var p = params.get("p");
-      if (p) {
-        // Rebuild clean URL (/phantominvitation/<route>) without reload
-        var clean = ("/phantominvitation" + (p.startsWith("/") ? p : "/" + p))
-          .replace(/\/+$/, "");
-        window.history.replaceState({}, "", clean);
-      }
-    })();
-  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phantom Invitation</title>
+  <link href="css/app.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="app">Loading...</div>
+  <div id="app">Loading…</div>
   <script src="_framework/blazor.webassembly.js"></script>
-  <script defer src="js/games.js"></script>
 </body>
 </html>
