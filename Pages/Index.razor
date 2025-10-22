@@ -44,11 +44,11 @@ else
     try
     {
       var val = await JS.InvokeAsync<string>("storage.get", "phantom_intro_dismissed");
-      showIntro = string.IsNullOrWhiteSpace(val);  // if nothing stored => show intro
+      showIntro = string.IsNullOrWhiteSpace(val); 
     }
     catch
     {
-      showIntro = true; // fallback to showing intro
+      showIntro = true;
     }
   }
 

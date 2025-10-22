@@ -5,7 +5,6 @@
 @inject NavigationManager Nav
 
 @code {
-  // Non-romantic, Phantom/Chicago flavored
   private static readonly string[] Pool = new[] {
     "🍸 Any alcohol you want!",
     "🧤🧣 Winter Kit (Gloves + Warmers)",
@@ -32,13 +31,13 @@
 
   protected override async Task OnInitializedAsync()
   {
-    // Load persisted prizes (so each person keeps the same 2)
+    
     try
     {
       scratchPrize = await JS.InvokeAsync<string>("storage.get", "phantom_scratch_prize");
       memoryPrize  = await JS.InvokeAsync<string>("storage.get", "phantom_memory_prize");
     }
-    catch { /* first run or storage helper missing */ }
+    catch { }
 
     if (string.IsNullOrWhiteSpace(scratchPrize) || string.IsNullOrWhiteSpace(memoryPrize))
     {
@@ -53,7 +52,7 @@
         await JS.InvokeVoidAsync("storage.set", "phantom_scratch_prize", scratchPrize);
         await JS.InvokeVoidAsync("storage.set", "phantom_memory_prize",  memoryPrize);
       }
-      catch { /* ignore */ }
+      catch { }
     }
   }
 

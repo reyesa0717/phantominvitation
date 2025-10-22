@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "PhantomAirInvite",
   "resources": {
-    "hash": "sha256-qjTvpmdjyBiqzQTo6QgHnoHaYzKiolvx3gJpruj7VI0=",
+    "hash": "sha256-lhI5+9CMNQoUm/zX1KTwLX7vN9VAB+OhpRigMh30U0E=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-O/NCYcAN9uPocD7ns7AzF/cqx7f5vL1PTJCQs0vEXyk="
     },
@@ -47,7 +47,7 @@
       "System.Text.Json.wasm": "sha256-A1HN3bXTetxuVki5znW2VIwMjHcksrEllPX7HCT9osI=",
       "System.Text.RegularExpressions.wasm": "sha256-amyl1Zsuf+PHSXqju/cl50LQlTKfUNpDi6hcFh10yrM=",
       "System.Private.CoreLib.wasm": "sha256-yVnn14XZIff6juGPgXf0vv4ZnEumQaUSxwGatAp/b8o=",
-      "PhantomAirInvite.wasm": "sha256-AnWQMIIqVM92k/NUFqVf4rSraUI9gNiDAoBZ6ID3eL4="
+      "PhantomAirInvite.wasm": "sha256-g0sDN2tTrECrje5nb2TRu+L0Gd59+lK3GDW1DCKDeh4="
     }
   },
   "cacheBootResources": true,

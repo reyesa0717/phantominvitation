@@ -34,7 +34,6 @@
     ctx.save();
     ctx.fillStyle = color || "#c0c0c0";
     ctx.fillRect(0, 0, w, h);
-    // Sheen
     ctx.globalAlpha = 0.25;
     for (let i = 0; i < h; i += 8) {
       ctx.fillStyle = i % 16 === 0 ? "#ffffff" : "#000000";
@@ -58,14 +57,13 @@
 
   function erasedRatio(ctx, w, h) {
     const data = ctx.getImageData(0, 0, w, h).data;
-    let transparent = 0; // count alpha==0
+    let transparent = 0;
     for (let i = 3; i < data.length; i += 4) {
       if (data[i] === 0) transparent++;
     }
     return transparent / (w * h);
   }
 
-  // Per-canvas state (for proper dispose)
   const scratchState = new Map();
 
   window.scratchGame = {
@@ -74,12 +72,12 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) { console.warn("scratchGame: canvas not found", canvasId); return; }
 
-      // Re-init safe
+      
       if (scratchState.has(canvasId)) this.dispose(canvasId);
 
       const dpr = DPR();
 
-      // Auto-size nicely on phones if width/height omitted
+    
       const parentW = canvas.parentElement ? canvas.parentElement.clientWidth : 320;
       const logicalW = Math.max(260, Math.min(opts?.width ?? parentW - 24, 520));
       const logicalH = opts?.height ?? Math.round(logicalW * 0.5);
@@ -93,14 +91,14 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
 
-      // Prize underlayer (backbuffer)
+      
       const back = document.createElement("canvas");
       back.width = canvas.width; back.height = canvas.height;
       const bctx = back.getContext("2d");
       bctx.scale(dpr, dpr);
       drawPrize(bctx, logicalW, logicalH, opts?.prize || "Prize");
 
-      // Copy prize to visible, then cover on top
+      
       ctx.drawImage(back, 0, 0);
       drawCover(ctx, logicalW, logicalH, opts?.coverColor || "#c0c0c0");
 
@@ -174,7 +172,7 @@
   };
 })();
 
-// ----- simple localStorage helper (polyfill if not present) -----
+
 window.storage = window.storage || {
   get: (key) => {
     try {
@@ -212,7 +210,7 @@ window.memoryGame = {
       cards.forEach((c)=>{
         const el = document.createElement('button');
         el.type = 'button';
-        el.className = 'mem-card'; // let CSS scale on phones
+        el.className = 'mem-card'; 
         el.style.cssText = `
           aspect-ratio:1/1; border-radius:12px; 
           background:${c.flipped||c.done ? 'rgba(217,179,107,.25)' : 'rgba(255,255,255,.06)'};

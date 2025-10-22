@@ -15,7 +15,7 @@
 </div>
 
 @code {
-  // Accept (and ignore) projected content so ChildContent binding is allowed.
+  
   [Parameter] public RenderFragment? ChildContent { get; set; }
 
   private readonly string _canvasId = $"scratch_{Guid.NewGuid():N}";

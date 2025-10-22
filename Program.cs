@@ -1,4 +1,4 @@
-// Program.cs — Blazor WebAssembly (.NET 8)
+
 
 using System;                    
 using System.Net.Http;           
