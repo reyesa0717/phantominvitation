@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -42,15 +42,14 @@ jobs:
           echo "Listing build/wwwroot/phantominvitation (if exists):"
           ls -la build/wwwroot/phantominvitation || true
 
-      # Detect actual folder that contains index.html
       - name: Locate index.html and set PUBLISH_DIR
         run: |
           if [ -f "build/wwwroot/index.html" ]; then
             echo "PUBLISH_DIR=build/wwwroot" >> $GITHUB_ENV
-            echo "Using PUBLISH_DIR=build/wwwroot"
+            echo "✅ Using PUBLISH_DIR=build/wwwroot"
           elif [ -f "build/wwwroot/phantominvitation/index.html" ]; then
             echo "PUBLISH_DIR=build/wwwroot/phantominvitation" >> $GITHUB_ENV
-            echo "Using PUBLISH_DIR=build/wwwroot/phantominvitation"
+            echo "✅ Using PUBLISH_DIR=build/wwwroot/phantominvitation"
           else
             echo "❌ Could not find index.html. Searching…"
             find build -maxdepth 4 -type f -name "index.html" -print
