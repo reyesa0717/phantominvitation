@@ -25,10 +25,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      # 👇 Point to the exact project file
       - name: Publish Blazor WASM
-        run: dotnet publish -c Release -o dist
+        run: dotnet publish ./PhantomAirInvite.csproj -c Release -o dist
 
-      # Move the published wwwroot to an artifact folder
       - name: Prepare Pages artifact
         run: |
           mkdir public
