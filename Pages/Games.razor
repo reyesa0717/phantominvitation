@@ -2,6 +2,7 @@
 @using Microsoft.JSInterop
 @using PhantomAirInvite.Shared.Games
 @inject IJSRuntime JS
+@inject NavigationManager Nav
 
 @code {
   // Non-romantic, Phantom/Chicago flavored
@@ -53,6 +54,29 @@
         await JS.InvokeVoidAsync("storage.set", "phantom_memory_prize",  memoryPrize);
       }
       catch { /* ignore */ }
+    }
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (!firstRender) return;
+
+    // Guard: if the intro letter hasn't been opened yet, go back to Home.
+    try
+    {
+      var seen = await JS.InvokeAsync<string>("storage.get", "phantom_intro_dismissed");
+      if (string.IsNullOrWhiteSpace(seen))
+      {
+        // Use a *relative* navigate so it respects <base href="/phantominvitation/">
+        Nav.NavigateTo("", forceLoad: false);
+        return;
+      }
+    }
+    catch
+    {
+      // If storage helper isn't available, be safe and route to Home
+      Nav.NavigateTo("", forceLoad: false);
+      return;
     }
   }
 }
