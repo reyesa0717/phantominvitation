@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecting…</title>
+  <meta http-equiv="refresh" content="0; url=/phantominvitation/?p=/" />
+  <script>
+    // SPA fallback for GitHub Pages:
+    // Take the current path/query/hash and stuff it into ?p=
+    (function () {
+      var l = window.location;
+      var repoBase = "/phantominvitation";
+      // Strip the repo base from pathname so the app can re-apply it
+      var path = l.pathname.indexOf(repoBase) === 0
+        ? l.pathname.substring(repoBase.length)
+        : l.pathname;
+      var target = repoBase + "/?p=" + encodeURIComponent(path + (l.search || "") + (l.hash || ""));
+      l.replace(target);
+    })();
+  </script>
+</head>
+<body>Redirecting…</body>
+</html>

@@ -2,11 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Phantom Invitation</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Phantom Air</title>
   <base href="/phantominvitation/" />
 
-  <link href="css/app.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+  <meta name="description" content="An interactive Phantom of the Opera trip invitation with games and a boarding pass." />
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var p = params.get("p");
+      if (p) {
+        // Rebuild clean URL (/phantominvitation/<route>) without reload
+        var clean = ("/phantominvitation" + (p.startsWith("/") ? p : "/" + p))
+          .replace(/\/+$/, "");
+        window.history.replaceState({}, "", clean);
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="app">Loading...</div>
