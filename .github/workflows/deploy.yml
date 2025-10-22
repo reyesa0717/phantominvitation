@@ -24,22 +24,54 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: '8.0.x'
 
       - name: Publish Blazor WASM
         run: dotnet publish ./PhantomAirInvite.csproj -c Release -o dist
 
-      - name: Add 404.html for client routing
-        run: cp dist/wwwroot/index.html dist/wwwroot/404.html
+      # Find where index.html actually landed
+      - name: Detect site directory
+        id: detect
+        shell: bash
+        run: |
+          echo "Listing dist:"
+          ls -la dist || true
+          echo "Listing dist/wwwroot:"
+          ls -la dist/wwwroot || true
+          echo "Listing bin publish:"
+          ls -la bin/Release/*/publish/wwwroot || true
+
+          if [ -f dist/wwwroot/index.html ]; then
+            echo "SITE_DIR=dist/wwwroot" >> $GITHUB_ENV
+          elif [ -f dist/index.html ]; then
+            # Some templates publish directly into dist
+            echo "SITE_DIR=dist" >> $GITHUB_ENV
+          elif [ -f bin/Release/net8.0/publish/wwwroot/index.html ]; then
+            echo "SITE_DIR=bin/Release/net8.0/publish/wwwroot" >> $GITHUB_ENV
+          elif [ -f bin/Release/net7.0/publish/wwwroot/index.html ]; then
+            echo "SITE_DIR=bin/Release/net7.0/publish/wwwroot" >> $GITHUB_ENV
+          else
+            echo "❌ Could not find index.html. Folder tree for debugging:" 
+            find . -maxdepth 5 -type f -name index.html
+            exit 1
+          fi
+          echo "Detected site dir: $SITE_DIR"
+
+      # Add 404.html for client-side routing
+      - name: Add 404.html for SPA routing
+        run: cp "$SITE_DIR/index.html" "$SITE_DIR/404.html"
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/wwwroot
+          path: ${{ env.SITE_DIR }}
 
   deploy:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
