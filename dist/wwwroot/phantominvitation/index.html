@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/phantominvitation/"><!-- keep this EXACTLY -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phantom Invitation</title>
+  <link href="css/app.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="app">Loading…</div>
+
+  <script>
+    window.storage = {
+      get: (k) => Promise.resolve(localStorage.getItem(k)),
+      set: (k, v) => { localStorage.setItem(k, v); return Promise.resolve(); },
+      remove: (k) => { localStorage.removeItem(k); return Promise.resolve(); }
+    };
+  </script>
+
+  <script src="js/games.js"></script>
+  <script src="_framework/blazor.webassembly.js"></script>
+</body>
+</html>

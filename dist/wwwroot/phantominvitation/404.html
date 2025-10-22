@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <meta http-equiv="refresh" content="0; url=/phantominvitation/">
+  <script>
+    const root = '/phantominvitation';
+    const sub = location.pathname.startsWith(root) ? location.pathname.slice(root.length) : location.pathname;
+    const dest = root + '/#' + sub + location.search + location.hash;
+    location.replace(dest);
+  </script>
+</head>
+<body></body>
+</html>
