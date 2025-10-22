@@ -5,14 +5,14 @@
 @if (showIntro)
 {
   <IntroLetter Headline="From the Opera’s Desk"
-               Body="Your passage to Chicago awaits. Inside: your seats, our flight path, and a game or two to unlock themed perks."
+               Body="Your Invitation to a presentation. Inside your seats, our flight path, and a game or two to unlock prizes."
                PresentationDate="@PresentationDate"
                OnOpen="DismissIntro" />
 }
 else
 {
   <div class="section text-center">
-    <h1 style="letter-spacing:.12em">PHANTOM AIR</h1>
+    <h1 style="letter-spacing:.12em">PHANTOM'S LETTER</h1>
 
     <div class="card maxw" style="margin-bottom:10px">
       <strong>See you Friday:</strong> @PresentationDate.ToString("dddd, MMM d") — “What we’ll do in Chicago”
@@ -23,29 +23,26 @@ else
     </div>
 
     <div class="card maxw tickets-wrap" style="margin-top:14px">
-      <h3 style="margin-top:0">Tonight’s Tickets</h3>
+      <h3 style="margin-top:0">Presentation Tickets</h3>
       <Tickets Items="@tickets" />
     </div>
 
-    <div class="stack" style="margin-top:14px">
-      <a class="btn" href="/games">Play Games</a>
-    </div>
   </div>
 }
 
 @code {
-  DateTime PresentationDate = new DateTime(2025, 1, 17);
+  DateTime PresentationDate = new DateTime(2025, 10, 24);
 
   Tickets.Ticket[] tickets = new Tickets.Ticket[] {
-    new Tickets.Ticket("GF Name",       "Main Floor", "J", "12", "Cadillac Palace Theatre, Chicago"),
-    new Tickets.Ticket("Sister-in-law", "Main Floor", "J", "13", "Cadillac Palace Theatre, Chicago"),
+    new Tickets.Ticket("Raquel Sanchez","Living Room", "R", "24", "Cadillac Palace Theatre, Chicago"),
+    new Tickets.Ticket("Erica Penaflor", "Living Room", "E", "67", "Cadillac Palace Theatre, Chicago"),
   };
 
   bool showIntro = true;
 
   protected override async Task OnInitializedAsync()
   {
-    // If storage helper exists, only show once; otherwise default to showing
+    
     try
     {
       var val = await JS.InvokeAsync<string>("storage.get", "phantom_intro_dismissed");

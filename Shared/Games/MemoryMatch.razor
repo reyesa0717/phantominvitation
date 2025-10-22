@@ -18,7 +18,6 @@
 @code {
   [Inject] IJSRuntime JS { get; set; } = default!;
 
-  // Supply prizes from the page that hosts this component
   [Parameter] public string[] Prizes { get; set; } = Array.Empty<string>();
 
   string _gridId = $"mem-{Guid.NewGuid():N}";

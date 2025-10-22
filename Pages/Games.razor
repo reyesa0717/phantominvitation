@@ -6,9 +6,16 @@
 @code {
   // Non-romantic, Phantom/Chicago flavored
   private static readonly string[] Pool = new[] {
-    "🎟 Any Alcohol you want!", "🧤 Winter Kit (Gloves + Warmers)", "Airplane Pillow",
-    "☕ Chick-fil-A Gift Card", "Ulta Gift Card", "Bag of Candy",
-    "🎭 Phantom Pin/Sticker", "Socks", "🧼 Travel Mini Kit", "Donut"
+    "🍸 Any alcohol you want!",
+    "🧤🧣 Winter Kit (Gloves + Warmers)",
+    "✈️💤 Airplane Pillow",
+    "🐔🍟 Chick-fil-A Gift Card",
+    "💄💳 Ulta Gift Card",
+    "🍬🛍️ Bag of Candy",
+    "🎭 Phantom Pin / Sticker",
+    "🧦 Cozy Socks",
+    "🧴🪥 Travel Mini Kit",
+    "🍩 Donut"
   };
 
   string? scratchPrize;
@@ -54,7 +61,7 @@
   <h2>Quick Games</h2>
 
   <p class="card" style="max-width:720px">
-    Earn up to <strong>2 prizes</strong> tonight—one from each game. Redeem with the host during the presentation.
+    Earn up to <strong>2 prizes</strong> tonight. One from each game. Please provide screenshot of the prize you won!
   </p>
 
   <!-- SCRATCH-OFF -->
@@ -77,9 +84,7 @@
     <div style="max-width: 320px; margin-inline:auto;">
       <MemoryMatch />
     </div>
-    <div class="prize-callout" style="margin-top:10px">
-      <strong>Prize on win:</strong> @(memoryPrize ?? "🎟 Mystery Prize")
-    </div>
+
     <p style="font-size:.9rem;opacity:.8;margin-top:8px">(Prize limit 1 from this game)</p>
   </div>
 </div>
