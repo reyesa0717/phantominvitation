@@ -15,10 +15,12 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  PUBLISH_DIR: build/wwwroot
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,27 +30,29 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      # 👉 Publish to a fixed folder: build/
       - name: Publish Blazor WASM
-        run: dotnet publish ./PhantomAirInvite.csproj -c Release -o dist
+        run: dotnet publish ./PhantomAirInvite.csproj -c Release -o build
 
-      - name: Debug output folder
+      - name: Debug output
         run: |
-          echo "Listing dist:"
-          ls -la dist
-          echo "Listing dist/wwwroot:"
-          ls -la dist/wwwroot || true
+          echo "Listing build:"
+          ls -la build || true
+          echo "Listing build/wwwroot:"
+          ls -la build/wwwroot || true
 
-
+      # Required so _framework files are not blocked by Jekyll
       - name: Ensure .nojekyll exists
-        run: touch dist/wwwroot/.nojekyll
+        run: touch $PUBLISH_DIR/.nojekyll
 
+      # SPA routing: make 404.html = index.html
       - name: Add 404.html for client routing
-        run: cp dist/wwwroot/index.html dist/wwwroot/404.html
+        run: cp $PUBLISH_DIR/index.html $PUBLISH_DIR/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/wwwroot
+          path: ${{ env.PUBLISH_DIR }}
 
   deploy:
     needs: build
