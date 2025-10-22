@@ -18,6 +18,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,15 +31,15 @@ jobs:
       - name: Publish Blazor WASM
         run: dotnet publish ./PhantomAirInvite.csproj -c Release -o dist
 
-      # We upload dist/wwwroot (Blazor’s static output)
-      - name: List outputs (debug)
+      - name: Debug output folder
         run: |
           echo "Listing dist:"
           ls -la dist
           echo "Listing dist/wwwroot:"
           ls -la dist/wwwroot || true
 
-      - name: Ensure .nojekyll exists   # 👈 CRITICAL
+
+      - name: Ensure .nojekyll exists
         run: touch dist/wwwroot/.nojekyll
 
       - name: Add 404.html for client routing
