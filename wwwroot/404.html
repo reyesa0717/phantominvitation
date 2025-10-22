@@ -1,10 +1,16 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Redirecting…</title>
-<script>
-  (function(){
-    var repo="/phantominvitation";
-    var l=window.location;
-    if(!l.pathname.startsWith(repo)) repo="";
-    var redirect=repo+"/index.html#"+l.pathname.substring(repo.length)+l.search+l.hash;
-    window.location.replace(redirect);
-  })();
-</script></head><body>Redirecting…</body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <meta http-equiv="refresh" content="0; url=/phantominvitation/">
+  <script>
+    // Preserve path for Blazor router (simple hash fallback)
+    const root = '/phantominvitation';
+    const sub = location.pathname.startsWith(root) ? location.pathname.slice(root.length) : location.pathname;
+    const dest = root + '/#' + sub + location.search + location.hash;
+    location.replace(dest);
+  </script>
+</head>
+<body></body>
+</html>
