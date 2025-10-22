@@ -1,9 +1,10 @@
-@namespace PhantomAirInvite
 @using Microsoft.AspNetCore.Components.Routing
+@using PhantomAirInvite.Shared
+@inject Microsoft.JSInterop.IJSRuntime JS
 
 <Router AppAssembly="@typeof(App).Assembly">
   <Found Context="routeData">
-    <RouteView RouteData="routeData" DefaultLayout="@typeof(MainLayout)" />
+    <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
   </Found>
   <NotFound>
     <LayoutView Layout="@typeof(MainLayout)">

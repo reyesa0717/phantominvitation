@@ -1,42 +1,31 @@
-@namespace PhantomAirInvite.Shared
-@using Microsoft.JSInterop
-
-<div class="intro-overlay @(opened ? "opened" : "")">
-  <div class="envelope @(opened ? "open" : "")" @onclick="OpenNow" role="button" aria-label="Open invitation">
+<div class="intro-overlay">
+  <div class="envelope @(flap ? "open" : "")" @onclick="Open">
     <div class="flap"></div>
-    <div class="letter">
-      <h2>@Headline</h2>
-      <p>@Body</p>
-      <div class="friday">
-        <strong>Presentation:</strong> @PresentationDate.ToString("dddd, MMM d")
-      </div>
-      <button class="btn" type="button" @onclick="OpenNow">Open Invitation</button>
+    <div class="letter" @onclick:stopPropagation="true">
+      <h2>@(Headline ?? "From the Opera’s Desk")</h2>
+      <p>@(Body ?? "Your passage to Chicago awaits.")</p>
+      @if (PresentationDate != default)
+      {
+        <div class="friday"><strong>Presentation:</strong> @PresentationDate.ToString("dddd, MMM d")</div>
+      }
+      <button class="btn" type="button" @onclick="Open">Open Invitation</button>
     </div>
   </div>
 </div>
 
 @code {
-  [Parameter] public string Headline { get; set; } = "An Invitation from Box Five";
-  [Parameter] public string Body { get; set; } =
-    "Welcome aboard Phantom Air. Within these pages lie your seats, your path to Chicago, and a few surprises. Scratch, play, and prepare for the show…";
-  [Parameter] public DateTime PresentationDate { get; set; } = DateTime.Today;
+  [Parameter] public string? Headline { get; set; }
+  [Parameter] public string? Body { get; set; }
+  [Parameter] public DateTime PresentationDate { get; set; }
   [Parameter] public EventCallback OnOpen { get; set; }
 
-  [Inject] IJSRuntime JS { get; set; } = default!;
+  bool flap = false;
 
-  bool opened = false;
-
-  private async Task OpenNow()
+  private async Task Open()
   {
-    if (opened) return;
-    opened = true;
+    flap = true;
     StateHasChanged();
-
-    //Envelope Animation
-    await Task.Delay(700);
-
-    try { await JS.InvokeVoidAsync("storage.set", "phantom_intro_dismissed", true); } catch { }
-
-    await OnOpen.InvokeAsync();
+    await Task.Delay(450);
+    if (OnOpen.HasDelegate) await OnOpen.InvokeAsync();
   }
 }

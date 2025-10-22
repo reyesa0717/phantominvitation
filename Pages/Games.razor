@@ -1,51 +1,41 @@
-@* enable nullable in this file *@
-#nullable enable
-
 @page "/games"
+@using Microsoft.JSInterop
 @using PhantomAirInvite.Shared.Games
-@inject Microsoft.JSInterop.IJSRuntime JS
+@inject IJSRuntime JS
 
 @code {
+  // Non-romantic, Phantom/Chicago flavored
   private static readonly string[] Pool = new[] {
-    "🍸 Any alcohol you want!",
-    "🧤🧣 Winter Kit (Gloves + Warmers)",
-    "✈️💤 Airplane Pillow",
-    "🐔🍟 Chick-fil-A Gift Card",
-    "💄💳 Ulta Gift Card",
-    "🍬🛍️ Bag of Candy",
-    "🎭 Phantom Pin / Sticker",
-    "🧦 Cozy Socks",
-    "🧴🪥 Travel Mini Kit",
-    "🍩 Donut"
-
+    "🎟 Any Alcohol you want!", "🧤 Winter Kit (Gloves + Warmers)", "Airplane Pillow",
+    "☕ Chick-fil-A Gift Card", "Ulta Gift Card", "Bag of Candy",
+    "🎭 Phantom Pin/Sticker", "Socks", "🧼 Travel Mini Kit", "Donut"
   };
 
   string? scratchPrize;
   string? memoryPrize;
 
-  string PickRandom() => Pool[new Random().Next(Pool.Length)];
+  string PickRandom() => Pool[Random.Shared.Next(Pool.Length)];
   string PickDistinct(string other)
   {
-    var r = new Random();
     string p;
-    do { p = Pool[r.Next(Pool.Length)]; } while (p == other);
+    do p = PickRandom(); while (p == other);
     return p;
   }
 
   protected override async Task OnInitializedAsync()
   {
+    // try to load persisted prizes
     try
     {
       scratchPrize = await JS.InvokeAsync<string>("storage.get", "phantom_scratch_prize");
       memoryPrize  = await JS.InvokeAsync<string>("storage.get", "phantom_memory_prize");
     }
-    catch { /* ignore (first run or helper missing) */ }
+    catch { /* ok first run */ }
 
-    // First run? Generate and persist two distinct prizes
     if (string.IsNullOrWhiteSpace(scratchPrize) || string.IsNullOrWhiteSpace(memoryPrize))
     {
-      var first = scratchPrize ?? PickRandom();
-      var second = memoryPrize ?? PickDistinct(first);
+      var first  = scratchPrize ?? PickRandom();
+      var second = memoryPrize  ?? PickDistinct(first);
 
       scratchPrize = first;
       memoryPrize  = second;
@@ -60,33 +50,36 @@
   }
 }
 
-<div class="section game-center">
+<div class="section" style="display:grid;place-items:center;gap:14px">
   <h2>Quick Games</h2>
-  <p class="card game-intro">
-    Earn up to <strong>2 prizes</strong> tonight. One from each game. Please send a screenshot of your prize!
+
+  <p class="card" style="max-width:720px">
+    Earn up to <strong>2 prizes</strong> tonight—one from each game. Redeem with the host during the presentation.
   </p>
 
-  <!-- SCRATCH-OFF (compact) -->
-  <div class="card game-card">
+  <!-- SCRATCH-OFF -->
+  <div class="card" style="margin-top:8px; max-width: 360px; width:100%">
     <h3 style="margin-top:0">Scratch-Off: Reveal the Mask</h3>
-    <div class="scratch-wrap">
-      <PhantomAirInvite.Shared.Games.ScratchOff
+    <div class="scratch-wrap" style="max-width: 320px; margin-inline:auto;">
+      <ScratchOff
         PrizeText="@(scratchPrize ?? "🎟 Mystery Prize")"
         CoverColor="#3a1012"
         Width="280"
         Height="150"
         Threshold="0.55" />
     </div>
-    <p class="game-note">(Prize limit 1 from this game)</p>
+    <p style="font-size:.9rem;opacity:.8;margin-top:8px">(Prize limit 1 from this game)</p>
   </div>
 
-  <!-- MEMORY MATCH (compact) -->
-  <div class="card game-card">
+  <!-- MEMORY MATCH -->
+  <div class="card" style="margin-top:8px; max-width: 360px; width:100%">
     <h3 style="margin-top:0">Memory Match: Light the Candles</h3>
-    <div class="memory-wrap">
-      <PhantomAirInvite.Shared.Games.MemoryMatch />
+    <div style="max-width: 320px; margin-inline:auto;">
+      <MemoryMatch />
     </div>
-
-    <p class="game-note">(Prize limit 1 from this game)</p>
+    <div class="prize-callout" style="margin-top:10px">
+      <strong>Prize on win:</strong> @(memoryPrize ?? "🎟 Mystery Prize")
+    </div>
+    <p style="font-size:.9rem;opacity:.8;margin-top:8px">(Prize limit 1 from this game)</p>
   </div>
 </div>

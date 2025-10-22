@@ -5,7 +5,6 @@
   <title>Redirecting…</title>
   <meta http-equiv="refresh" content="0; url=/phantominvitation/">
   <script>
-    // Preserve path for Blazor router (simple hash fallback)
     const root = '/phantominvitation';
     const sub = location.pathname.startsWith(root) ? location.pathname.slice(root.length) : location.pathname;
     const dest = root + '/#' + sub + location.search + location.hash;
