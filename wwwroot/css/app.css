@@ -250,6 +250,17 @@ h1,h2,h3,strong{ color:#c59806; }
   padding:8px 12px; border-radius:10px; color:#ffd166;
 }
 
+.scratch-wrap,
+.scratch-wrap canvas {
+  touch-action: none;           /* modern mobile browsers */
+  -ms-touch-action: none;       /* legacy Edge */
+}
+
+/* Reduce rubber-band / pull-to-refresh bounce while finger is down */
+.scratch-card {
+  overscroll-behavior: contain;
+}
+
 /* ===== Memory Match layout & visual ===== */
 .memory-grid{
   display:grid;

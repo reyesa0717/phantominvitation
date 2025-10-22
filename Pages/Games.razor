@@ -32,13 +32,13 @@
 
   protected override async Task OnInitializedAsync()
   {
-    // try to load persisted prizes
+    // Load persisted prizes (so each person keeps the same 2)
     try
     {
       scratchPrize = await JS.InvokeAsync<string>("storage.get", "phantom_scratch_prize");
       memoryPrize  = await JS.InvokeAsync<string>("storage.get", "phantom_memory_prize");
     }
-    catch { /* ok first run */ }
+    catch { /* first run or storage helper missing */ }
 
     if (string.IsNullOrWhiteSpace(scratchPrize) || string.IsNullOrWhiteSpace(memoryPrize))
     {
@@ -61,20 +61,20 @@
   {
     if (!firstRender) return;
 
-    // Guard: if the intro letter hasn't been opened yet, go back to Home.
+    // Gate Games behind the intro letter
     try
     {
       var seen = await JS.InvokeAsync<string>("storage.get", "phantom_intro_dismissed");
       if (string.IsNullOrWhiteSpace(seen))
       {
-        // Use a *relative* navigate so it respects <base href="/phantominvitation/">
+        // Respect <base href="/phantominvitation/"> by using empty relative route
         Nav.NavigateTo("", forceLoad: false);
         return;
       }
     }
     catch
     {
-      // If storage helper isn't available, be safe and route to Home
+      // If storage helper isn’t available, send them home
       Nav.NavigateTo("", forceLoad: false);
       return;
     }
@@ -85,13 +85,13 @@
   <h2>Quick Games</h2>
 
   <p class="card" style="max-width:720px">
-    Earn up to <strong>2 prizes</strong> tonight. One from each game. Please provide screenshot of the prize you won!
+    Earn up to <strong>2 prizes</strong> tonight. One from each game. Please provide a screenshot of the prize you won!
   </p>
 
   <!-- SCRATCH-OFF -->
   <div class="card" style="margin-top:8px; max-width: 360px; width:100%">
     <h3 style="margin-top:0">Scratch-Off: Reveal the Mask</h3>
-    <div class="scratch-wrap" style="max-width: 320px; margin-inline:auto;">
+    <div class="scratch-wrap scratch-card" style="max-width: 320px; margin-inline:auto;">
       <ScratchOff
         PrizeText="@(scratchPrize ?? "🎟 Mystery Prize")"
         CoverColor="#3a1012"
@@ -108,7 +108,6 @@
     <div style="max-width: 320px; margin-inline:auto;">
       <MemoryMatch />
     </div>
-
     <p style="font-size:.9rem;opacity:.8;margin-top:8px">(Prize limit 1 from this game)</p>
   </div>
 </div>
