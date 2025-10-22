@@ -26,7 +26,6 @@ else
       <h3 style="margin-top:0">Presentation Tickets</h3>
       <Tickets Items="@tickets" />
     </div>
-
   </div>
 }
 
@@ -42,15 +41,14 @@ else
 
   protected override async Task OnInitializedAsync()
   {
-    
     try
     {
       var val = await JS.InvokeAsync<string>("storage.get", "phantom_intro_dismissed");
-      showIntro = string.IsNullOrWhiteSpace(val);
+      showIntro = string.IsNullOrWhiteSpace(val);  // if nothing stored => show intro
     }
     catch
     {
-      showIntro = true;
+      showIntro = true; // fallback to showing intro
     }
   }
 
